@@ -1,10 +1,11 @@
 package routers
 
-import (
-	"beeweb/controllers"
-	"github.com/astaxie/beego"
-)
+import "github.com/gorilla/mux"
 
-func init() {
-    beego.Router("/", &controllers.MainController{})
+func InitRoutes() *mux.Router {
+	router := mux.NewRouter().StrictSlash(false)
+	router = SetUserRoutes(router)
+	router = SetTaskRoutes(router)
+	router = SetNoteRoutes(router)
+	return router
 }

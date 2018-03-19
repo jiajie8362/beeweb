@@ -1,11 +1,21 @@
 package main
 
 import (
-	_ "beeweb/routers"
-	"github.com/astaxie/beego"
+	"beeweb/common"
+	"beeweb/routers"
+	"github.com/codegangsta/negroni"
+	"net/http"
 )
 
 func main() {
-	beego.Run()
-}
+	common.StartUp()
+	router := routers.InitRoutes()
+	n := negroni.Classic()
+	n.UseHandler(router)
 
+	server := &http.Server{
+		Addr: common.AppConfig.Server,
+		Handler: n,
+	}
+	server.ListenAndServe()
+}
