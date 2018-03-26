@@ -5,7 +5,10 @@ import (
 	"log"
 )
 
-func Run(seeds ...Request) {
+type SimpleEngine struct {
+
+}
+func (e SimpleEngine) Run(seeds ...Request) {
 	var requests []Request
 	for _, r := range seeds {
 		requests = append(requests, r)
@@ -26,4 +29,12 @@ func Run(seeds ...Request) {
 			log.Printf("Got item %v", item)
 		}
 	}
+}
+
+func (e SimpleEngine) worker(r Request) (ParseResult, error) {
+	body, err := fetcher.Fetch(r.Url)
+	if err != nil {
+		return ParseResult{}, err
+	}
+	return r.ParseFunc(body), nil
 }
